@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: discovery-server
+security:
+  user:
+    name: root
+    password: root
+server:
+  port: 8000
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

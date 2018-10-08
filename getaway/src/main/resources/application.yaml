@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: getaway
+server:
+  port: 8010
+eureka:
+  client:
+    registryFetchIntervalSeconds: 5
+    registerWithEureka: false
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://root:root@localhost:8000/eureka/
+zuul:
+  routes:
+    test1:
+      path: /test1/**
