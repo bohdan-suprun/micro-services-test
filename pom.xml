@@ -10,8 +10,8 @@
 
     <modules>
         <module>discovery-server</module>
-        <module>test1</module>
         <module>getaway</module>
+        <module>user</module>
     </modules>
 
     <name>Microservices demo project</name>
@@ -47,6 +47,12 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
