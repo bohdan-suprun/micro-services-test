@@ -10,4 +10,5 @@ import ua.suprun.user.entity.UserEntity;
  */
 public interface UserRepository extends CrudRepository<UserEntity, Long>
 {
+    UserEntity findUserByEmailIgnoreCase(String email);
 }

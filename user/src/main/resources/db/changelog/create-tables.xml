@@ -22,4 +22,13 @@
             <dropTable tableName="users"/>
         </rollback>
     </changeSet>
+
+    <changeSet id="2_suprun" author="suprun">
+        <addColumn tableName="users">
+            <column name="role" type="varchar(100)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn columnName="role" tableName="users"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

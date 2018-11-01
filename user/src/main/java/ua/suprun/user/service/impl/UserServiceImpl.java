@@ -28,4 +28,10 @@ public class UserServiceImpl implements UserService
     {
         return userRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public UserEntity findUserByEmail(String email)
+    {
+        return userRepository.findUserByEmailIgnoreCase(email);
+    }
 }

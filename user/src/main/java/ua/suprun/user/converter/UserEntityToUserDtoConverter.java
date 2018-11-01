@@ -20,6 +20,7 @@ public class UserEntityToUserDtoConverter implements Converter<UserEntity, UserD
         userDto.setEmail(userEntity.getEmail());
         userDto.setFullName(userEntity.getFirstName() + " " + userEntity.getLastName());
         userDto.setId(userEntity.getId());
+        userDto.setRole(userEntity.getRole());
 
         return userDto;
     }
