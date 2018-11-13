@@ -29,6 +29,8 @@ zuul:
   routes:
     user:
       path: /user/**
+    film:
+      path: /film/**
 
 logging.level:
   org.springframework.security: DEBUG

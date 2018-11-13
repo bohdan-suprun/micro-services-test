@@ -11,7 +11,7 @@
     <modules>
         <module>discovery-server</module>
         <module>getaway</module>
-        <module>user</module>
+        <module>microservices</module>
     </modules>
 
     <name>Microservices demo project</name>

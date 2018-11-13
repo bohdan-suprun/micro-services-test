@@ -1,0 +1,77 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1_suprun" author="suprun">
+        <createTable tableName="films">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="countries_of_production" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="dateTime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="films"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2_suprun" author="suprun">
+        <createTable tableName="stars">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="full_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="stars"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="3_suprun" author="suprun">
+        <createTable tableName="positions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="positions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="4_suprun" author="suprun">
+        <createTable tableName="film_staff">
+            <column name="film_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="star_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="position_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="film_staff" baseColumnNames="film_id" constraintName="FK_FILM_STAFF_FILM_ID"
+                                 referencedTableName="films" referencedColumnNames="id" onDelete="NO ACTION"/>
+        <addForeignKeyConstraint baseTableName="film_staff" baseColumnNames="star_id" constraintName="FK_FILM_STAFF_STAR_ID"
+                                 referencedTableName="stars" referencedColumnNames="id" onDelete="NO ACTION"/>
+        <addForeignKeyConstraint baseTableName="film_staff" baseColumnNames="position_id" constraintName="FK_FILM_STAFF_POSITION_ID"
+                                 referencedTableName="positions" referencedColumnNames="id" onDelete="NO ACTION"/>
+        <rollback>
+            <dropAllForeignKeyConstraints baseTableName="films"/>
+            <dropTable tableName="films"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

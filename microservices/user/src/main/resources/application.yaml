@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: user
+  datasource:
+    url: jdbc:mysql://localhost:3306/film_users?useSSL=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
