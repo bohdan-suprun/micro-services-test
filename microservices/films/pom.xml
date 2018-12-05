@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>ua.suprun</groupId>
-            <artifactId>common-utils</artifactId>
+            <artifactId>common-configuration</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
