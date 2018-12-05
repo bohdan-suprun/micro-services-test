@@ -6,10 +6,10 @@ security:
     name: root
     password: root
 server:
-  port: 8000
+  port: 8010
 eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
     service-url:
-      defaultZone: http://root:root@localhost:8000/eureka/
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://root:root@localhost:8010/eureka/}

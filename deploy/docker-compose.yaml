@@ -1,0 +1,60 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:5.6
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - 3306:3306
+  discovery:
+    image: openjdk:8-jdk
+    command: java -jar /deployments/discovery-server.jar
+    restart: always
+    volumes:
+      - ./jar:/deployments
+    environment:
+      EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+    ports:
+      - 8010:8010
+  getaway:
+    image: openjdk:8-jdk
+    command: java -jar /deployments/getaway.jar
+    restart: always
+    volumes:
+      - ./jar:/deployments
+    environment:
+      EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+    ports:
+      - 8000:8000
+    links:
+      - discovery
+  films:
+    image: openjdk:8-jdk
+    command: java -jar /deployments/films.jar
+    restart: always
+    volumes:
+      - ./jar:/deployments
+    environment:
+      DB_HOST: db:3306
+      DB_PASSWORD: root
+      EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+    links:
+      - discovery
+      - db
+  user:
+     image: openjdk:8-jdk
+     command: java -jar /deployments/user.jar
+     restart: always
+     volumes:
+       - ./jar:/deployments
+     environment:
+       DB_HOST: db
+       DB_PASSWORD: root
+       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+     links:
+       - discovery
+       - db

@@ -23,3 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+deploy/jar
+deploy/.vagrant/
+deploy/db/

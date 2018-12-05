@@ -17,14 +17,14 @@ spring:
   application:
     name: getaway
 server:
-  port: 8010
+  port: 8000
 eureka:
   client:
     registryFetchIntervalSeconds: 5
     registerWithEureka: false
     fetchRegistry: true
     service-url:
-      defaultZone: http://root:root@localhost:8000/eureka/
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://root:root@localhost:8000/eureka/}
 zuul:
   routes:
     user:
