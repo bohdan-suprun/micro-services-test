@@ -9,7 +9,6 @@ import ua.suprun.common.annotations.JpaMicroService;
  * @author Bohdan_Suprun
  */
 @JpaMicroService("ua.suprun.user.repository")
-//@PropertySource("classpath:/liquibase-properties.properties")
 public class UserApp
 {
     public static void main(String[] args)

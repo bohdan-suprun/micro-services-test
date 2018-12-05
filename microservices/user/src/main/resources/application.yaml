@@ -3,3 +3,4 @@ spring:
     name: user
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}/film_users?useSSL=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
+swagger.base-package: ua.suprun.user.controller

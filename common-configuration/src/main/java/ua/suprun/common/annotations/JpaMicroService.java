@@ -3,9 +3,11 @@ package ua.suprun.common.annotations;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import ua.suprun.common.configuration.SwaggerConfiguration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,6 +30,7 @@ import java.lang.annotation.Target;
     @PropertySource("classpath:/eureka-properties.properties"),
     @PropertySource("classpath:/server-properties.properties")
 })
+@Import(SwaggerConfiguration.class)
 public @interface JpaMicroService
 {
     /**
