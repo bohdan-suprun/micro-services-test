@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ua.suprun.user.dto.UserCreateDto;
-import ua.suprun.user.dto.UserDto;
+import ua.suprun.dto.user.UserCreateDto;
+import ua.suprun.dto.user.UserDto;
 import ua.suprun.user.entity.UserEntity;
 import ua.suprun.user.service.UserService;
 

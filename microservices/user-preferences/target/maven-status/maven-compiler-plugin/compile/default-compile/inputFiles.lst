@@ -1,0 +1,9 @@
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\controller\UserPreferencesController.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\service\UserPreferencesService.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\UserPreferencesApp.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\repository\UserPreferencesRepository.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\configuration\ConversionServiceConfiguration.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\service\impl\UserPreferencesServiceImpl.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\converter\UserPreferencesDtoToUserPreferencesEntityConverter.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\converter\UserPreferencesEntityToUserPreferencesDtoConverter.java
+D:\git\micro-services-test\microservices\user-preferences\src\main\java\ua\suprun\userpref\entity\UserPreferencesEntity.java

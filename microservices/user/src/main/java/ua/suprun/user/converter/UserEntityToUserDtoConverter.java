@@ -2,7 +2,7 @@ package ua.suprun.user.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
-import ua.suprun.user.dto.UserDto;
+import ua.suprun.dto.user.UserDto;
 import ua.suprun.user.entity.UserEntity;
 
 /**

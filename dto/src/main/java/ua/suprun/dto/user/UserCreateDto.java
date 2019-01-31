@@ -1,4 +1,4 @@
-package ua.suprun.user.dto;
+package ua.suprun.dto.user;
 
 import lombok.Data;
 
