@@ -1,6 +1,4 @@
 spring:
   application:
-    name: film
-  datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}/film_films?useSSL=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
-swagger.base-package: ua.suprun.films.controller
+    name: user-films-edge
+swagger.base-package: ua.suprun.userfilmsedge.controller

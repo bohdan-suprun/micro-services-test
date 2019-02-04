@@ -31,6 +31,8 @@ zuul:
       path: /user/**
     film:
       path: /film/**
+    user-films-edge:
+      path: /user-films-edge/**
 
 logging.level:
   org.springframework.security: DEBUG

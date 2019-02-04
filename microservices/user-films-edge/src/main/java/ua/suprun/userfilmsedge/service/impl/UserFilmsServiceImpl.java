@@ -31,14 +31,14 @@ public class UserFilmsServiceImpl implements UserFilmsService
     public UserFilmsDto getUserFilms(Long userId) throws Exception
     {
         final Future<Collection<UserPreferencesDto>> userPreferencesFuture = asyncClient
-            .getForCollection("/user-preferences/search/user-id/{userId}", UserPreferencesDto.class, userId);
+            .getForCollection("/user-preferences/search/user-id/{userId}", UserPreferencesDto[].class, userId);
         final Future<UserDto> userFuture = asyncClient.get("/user/{userId}", UserDto.class, userId);
 
         // Get responses
         final Collection<UserPreferencesDto> userPreferencesDtos = AsyncResultFetcher.fetchResult(userPreferencesFuture);
         final List<Future<FilmDto>> filmFutures = userPreferencesDtos
             .stream()
-            .map(userPreferencesDto -> asyncClient.get("/films/{filmId}", FilmDto.class, userPreferencesDto.getFilmId()))
+            .map(userPreferencesDto -> asyncClient.get("/film/{filmId}", FilmDto.class, userPreferencesDto.getFilmId()))
             .collect(Collectors.toList());
 
         final UserFilmsDto userFilmsDto = new UserFilmsDto();

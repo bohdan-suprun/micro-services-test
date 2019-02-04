@@ -30,7 +30,7 @@ public class AsyncClientConfiguration
     }
 
     @Bean
-    public AsyncClient asyncClient(RestTemplate restTemplate, ThreadPoolExecutor threadPoolExecutor)
+    public AsyncClient asyncClient(RestTemplate restTemplate, ThreadPoolTaskExecutor threadPoolExecutor)
     {
         return new AsyncClientImpl(restTemplate, threadPoolExecutor);
     }

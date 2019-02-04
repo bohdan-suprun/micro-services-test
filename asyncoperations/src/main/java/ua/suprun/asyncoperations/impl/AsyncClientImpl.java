@@ -1,11 +1,14 @@
 package ua.suprun.asyncoperations.impl;
 
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 import ua.suprun.asyncoperations.AsyncClient;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Class AsyncClientImpl implementation.
@@ -15,32 +18,42 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AsyncClientImpl implements AsyncClient
 {
     private final RestTemplate restTemplate;
-    private final ThreadPoolExecutor threadPoolexecutor;
+    private final ThreadPoolTaskExecutor threadPoolExecutor;
 
-    public AsyncClientImpl(RestTemplate restTemplate, ThreadPoolExecutor threadPoolExecutor)
+    public AsyncClientImpl(RestTemplate restTemplate, ThreadPoolTaskExecutor threadPoolExecutor)
     {
         this.restTemplate = restTemplate;
-        this.threadPoolexecutor = threadPoolExecutor;
+        this.threadPoolExecutor = threadPoolExecutor;
     }
 
     @Override
     public <RS> Future<RS> get(final String url, final Class<RS> responseType, final Object... args)
     {
-        return threadPoolexecutor.submit(() -> restTemplate.getForEntity(url, responseType, args).getBody());
+        return threadPoolExecutor.submit(() -> restTemplate.getForEntity(translateUrl(url), responseType, args).getBody());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <RS> Future<Collection<RS>> getForCollection(String url, Class<RS> responseType, Object... args)
+    public <RS> Future<Collection<RS>> getForCollection(String url, Class<RS[]> responseType, Object... args)
     {
-        return threadPoolexecutor.submit(() -> restTemplate.getForEntity(url, Collection.class, args).getBody());
+        return threadPoolExecutor.submit(() -> {
+            RS[] results = restTemplate.getForEntity(translateUrl(url), responseType, args).getBody();
+            final List<RS> resultsAsList = new ArrayList<>();
+
+            if (results != null)
+            {
+                Collections.addAll(resultsAsList, results);
+            }
+
+            return resultsAsList;
+        });
 
     }
 
     @Override
     public <RQ, RS> Future<RS> post(String url, RQ request, Class<RS> responseType, Object... args)
     {
-        return threadPoolexecutor.submit(() -> restTemplate.postForEntity(url, request, responseType, args).getBody());
+        return threadPoolExecutor
+            .submit(() -> restTemplate.postForEntity(translateUrl(url), request, responseType, args).getBody());
     }
 
     private String translateUrl(String url)
