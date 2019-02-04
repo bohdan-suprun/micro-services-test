@@ -14,6 +14,7 @@
         <module>microservices</module>
         <module>common-configuration</module>
         <module>dto</module>
+        <module>asyncoperations</module>
     </modules>
 
     <name>Microservices demo project</name>

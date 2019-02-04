@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
     @PropertySource("classpath:/server-properties.properties")
 })
 @Import(SwaggerConfiguration.class)
-public @interface JpaMicroService
+public @interface JpaService
 {
     /**
      * Alias for the {@link #basePackages()} attribute. Allows for more concise annotation declarations e.g.:

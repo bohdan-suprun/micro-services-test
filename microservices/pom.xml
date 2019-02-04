@@ -15,6 +15,7 @@
         <module>user</module>
         <module>films</module>
         <module>user-preferences</module>
+        <module>user-films-edge</module>
     </modules>
 
     <dependencies>
