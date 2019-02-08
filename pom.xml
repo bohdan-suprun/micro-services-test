@@ -9,9 +9,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>discovery-server</module>
-        <module>getaway</module>
         <module>microservices</module>
+        <module>infraservices</module>
         <module>common-configuration</module>
         <module>dto</module>
         <module>asyncoperations</module>
@@ -25,6 +24,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
+        <docker.plugin.version>0.4.10</docker.plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -57,4 +57,81 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker.plugin.version}</version>
+                    <configuration>
+                        <dockerDirectory>${project.basedir}</dockerDirectory>
+                        <imageName>${project.artifactId}</imageName>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.16.4</version>
+                    <executions>
+                        <execution>
+                            <id>Build docker container</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <images>
+                            <image>
+                                <name>${project.artifactId}</name>
+                                <registry>registry.io</registry>
+                                <build>
+                                    <from>java:8</from>
+                                    <tags>
+                                        <tag>${project.version}</tag>
+                                    </tags>
+                                    <cmd>
+                                        <shell>java -jar /jars/${project.build.finalName}.jar</shell>
+                                    </cmd>
+                                    <assembly>
+                                        <basedir>/</basedir>
+                                        <inline>
+                                            <files>
+                                                <file>
+                                                    <source>${project.build.directory}/${project.build.finalName}.jar</source>
+                                                    <outputDirectory>jars</outputDirectory>
+                                                </file>
+                                            </files>
+                                        </inline>
+                                    </assembly>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

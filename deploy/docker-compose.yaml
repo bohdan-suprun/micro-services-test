@@ -10,51 +10,71 @@ services:
       - ./db:/var/lib/mysql
     ports:
       - 3306:3306
-  discovery:
-    image: openjdk:8-jdk
-    command: java -jar /deployments/discovery-server.jar
+  trace-server:
+    image: trace-server:latest
     restart: always
-    volumes:
-      - ./jar:/deployments
+    ports:
+      - 9090:9090
+  discovery:
+    image: discovery-server:latest
+    restart: always
     environment:
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
     ports:
       - 8010:8010
   getaway:
-    image: openjdk:8-jdk
-    command: java -jar /deployments/getaway.jar
+    image: getaway:latest
     restart: always
-    volumes:
-      - ./jar:/deployments
     environment:
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+      TRACE_SERVER_URL: trace-server:9090
     ports:
       - 8000:8000
     links:
       - discovery
+      - trace-server
   films:
-    image: openjdk:8-jdk
-    command: java -jar /deployments/films.jar
+    image: films
     restart: always
-    volumes:
-      - ./jar:/deployments
     environment:
-      DB_HOST: db:3306
+      DB_HOST: db
       DB_PASSWORD: root
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+      TRACE_SERVER_URL: trace-server:9090
     links:
       - discovery
+      - trace-server
       - db
   user:
-     image: openjdk:8-jdk
-     command: java -jar /deployments/user.jar
+     image: user:latest
      restart: always
-     volumes:
-       - ./jar:/deployments
      environment:
        DB_HOST: db
        DB_PASSWORD: root
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+       TRACE_SERVER_URL: trace-server:9090
      links:
        - discovery
+       - trace-server
        - db
+  user-preferences:
+     image: user-preferences:latest
+     restart: always
+     environment:
+       DB_HOST: db
+       DB_PASSWORD: root
+       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+       TRACE_SERVER_URL: trace-server:9090
+     links:
+       - discovery
+       - trace-server
+       - db
+  user-films-edge:
+     image: user-films-edge:latest
+     restart: always
+     environment:
+       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+       TRACE_SERVER_URL: trace-server:9090
+     links:
+       - discovery
+       - trace-server
