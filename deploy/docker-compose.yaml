@@ -6,10 +6,10 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./db:/var/lib/mysql
+    # volumes:
+      # - ./db:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3307:3306
   trace-server:
     image: trace-server:latest
     restart: always

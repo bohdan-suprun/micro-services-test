@@ -35,4 +35,9 @@ zuul:
       path: /user-films-edge/**
 
 logging.level:
-  org.springframework.security: DEBUG
+  org.springframework.security: WARN
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 11000
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 11000
