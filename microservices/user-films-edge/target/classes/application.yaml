@@ -1,4 +1,0 @@
-spring:
-  application:
-    name: user-films-edge
-swagger.base-package: ua.suprun.userfilmsedge.controller

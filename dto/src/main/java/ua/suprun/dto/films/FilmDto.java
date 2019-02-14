@@ -2,9 +2,6 @@ package ua.suprun.dto.films;
 
 import lombok.Data;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
 /**
  * Class CreateFilmDto implementation.
  *

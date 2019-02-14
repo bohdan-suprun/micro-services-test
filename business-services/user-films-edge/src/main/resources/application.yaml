@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: user-films-edge
+swagger.base-package: ua.suprun.userfilmsedge.controller
+ua.suprun.caller.mq: ${ENABLE_MQ:false}

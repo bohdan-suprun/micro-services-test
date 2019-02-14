@@ -2,7 +2,6 @@ package ua.suprun.asyncoperations;
 
 import java.util.Collection;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class AsyncClient implementation.

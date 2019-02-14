@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>microservices</module>
+        <module>business-services</module>
         <module>infraservices</module>
         <module>common-configuration</module>
         <module>dto</module>

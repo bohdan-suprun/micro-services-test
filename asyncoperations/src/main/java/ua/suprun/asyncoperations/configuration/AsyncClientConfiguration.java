@@ -9,8 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import ua.suprun.asyncoperations.AsyncClient;
 import ua.suprun.asyncoperations.impl.AsyncClientImpl;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 /**
  * Class AsyncClientConfiguration implementation.
  *

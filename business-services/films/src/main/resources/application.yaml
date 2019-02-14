@@ -1,0 +1,11 @@
+spring:
+  rabbitmq:
+    host: 192.168.99.100
+    port: 5672
+    password: admin
+    username: admin
+  application:
+    name: film
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}/film_films?useSSL=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
+swagger.base-package: ua.suprun.films.controller.rest
