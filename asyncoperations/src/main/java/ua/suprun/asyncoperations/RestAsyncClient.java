@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.concurrent.Future;
 
 /**
- * Class AsyncClient implementation.
+ * Class RestAsyncClient implementation.
  *
  * @author Bohdan_Suprun
  */
-public interface AsyncClient
+public interface RestAsyncClient
 {
     <RS> Future<RS> get(String url, Class<RS> responseType, Object... args);
 

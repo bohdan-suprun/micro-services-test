@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: user-preferences
-  datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}/user_preferences?useSSL=true&characterEncoding=UTF-8&createDatabaseIfNotExist=true
-swagger.base-package: ua.suprun.userpref.controller

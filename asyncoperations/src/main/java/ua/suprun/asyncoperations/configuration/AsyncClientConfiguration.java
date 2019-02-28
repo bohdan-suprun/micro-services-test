@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
-import ua.suprun.asyncoperations.AsyncClient;
+import ua.suprun.asyncoperations.RestAsyncClient;
 import ua.suprun.asyncoperations.impl.AsyncClientImpl;
 
 /**
@@ -28,7 +28,7 @@ public class AsyncClientConfiguration
     }
 
     @Bean
-    public AsyncClient asyncClient(RestTemplate restTemplate, ThreadPoolTaskExecutor threadPoolExecutor)
+    public RestAsyncClient asyncClient(RestTemplate restTemplate, ThreadPoolTaskExecutor threadPoolExecutor)
     {
         return new AsyncClientImpl(restTemplate, threadPoolExecutor);
     }

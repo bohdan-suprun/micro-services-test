@@ -1,9 +1,14 @@
 package ua.suprun.userfilmsedge.service.impl;
 
+import com.netflix.discovery.converters.Auto;
+import org.springframework.amqp.core.AsyncAmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.stereotype.Service;
-import ua.suprun.asyncoperations.AsyncClient;
+import org.springframework.util.concurrent.ListenableFuture;
 import ua.suprun.asyncoperations.AsyncResultFetcher;
+import ua.suprun.asyncoperations.RestAsyncClient;
 import ua.suprun.dto.films.FilmDto;
 import ua.suprun.dto.user.UserDto;
 import ua.suprun.dto.userfilmsedge.UserFilmsDto;
@@ -25,7 +30,11 @@ import java.util.stream.Collectors;
 public class UserFilmsServiceImpl implements UserFilmsService
 {
     @Autowired
-    private AsyncClient asyncClient;
+    private RestAsyncClient asyncClient;
+    @Value("${application.amqp.films.get-films-by-id-exchange-name}")
+    private String filmsByIdExchangeName;
+    @Autowired
+    private AsyncAmqpTemplate asyncAmqpTemplate;
 
     @Override
     public UserFilmsDto getUserFilms(Long userId) throws Exception
@@ -36,14 +45,14 @@ public class UserFilmsServiceImpl implements UserFilmsService
 
         // Get responses
         final Collection<UserPreferencesDto> userPreferencesDtos = AsyncResultFetcher.fetchResult(userPreferencesFuture);
-        final List<Future<FilmDto>> filmFutures = userPreferencesDtos
-            .stream()
-            .map(userPreferencesDto -> asyncClient.get("/film/{filmId}", FilmDto.class, userPreferencesDto.getFilmId()))
-            .collect(Collectors.toList());
+        final List<Long> filmsId = userPreferencesDtos.stream().map(UserPreferencesDto::getFilmId).collect(Collectors.toList());
+
+        final ListenableFuture<Collection<FilmDto>> filmsDto = asyncAmqpTemplate
+            .convertSendAndReceive(filmsByIdExchangeName, "films-id", filmsId);
 
         final UserFilmsDto userFilmsDto = new UserFilmsDto();
         userFilmsDto.setUser(AsyncResultFetcher.fetchResult(userFuture));
-        userFilmsDto.setUserFilms(AsyncResultFetcher.fetchResults(filmFutures));
+        userFilmsDto.setUserFilms(AsyncResultFetcher.fetchResult(filmsDto));
 
         return userFilmsDto;
     }

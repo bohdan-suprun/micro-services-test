@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +22,10 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitMqConfiguration
 {
-    private static final String queueName = "get-films-by-id";
+    @Value("${application.amqp.get-films-by-id-queue-name}")
+    private String queueName;
+    @Value("${application.amqp.get-films-by-id-exchange-name}")
+    private String exchangeName;
 
     @Bean
     public Queue getFilmsByIdQueue()
@@ -32,7 +36,7 @@ public class RabbitMqConfiguration
     @Bean
     public FanoutExchange getFilmsByIdExchange()
     {
-        return new FanoutExchange(queueName + "-exchange");
+        return new FanoutExchange(exchangeName);
     }
 
     @Bean
@@ -42,18 +46,8 @@ public class RabbitMqConfiguration
     }
 
     @Bean
-    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter messageConverter)
-    {
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter);
-
-        return rabbitTemplate;
-    }
-
-    @Bean
     public Jackson2JsonMessageConverter jacksonConverter()
     {
         return new Jackson2JsonMessageConverter();
     }
-
 }

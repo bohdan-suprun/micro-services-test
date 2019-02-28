@@ -2,7 +2,7 @@ package ua.suprun.asyncoperations.impl;
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
-import ua.suprun.asyncoperations.AsyncClient;
+import ua.suprun.asyncoperations.RestAsyncClient;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
  *
  * @author Bohdan_Suprun
  */
-public class AsyncClientImpl implements AsyncClient
+public class AsyncClientImpl implements RestAsyncClient
 {
     private final RestTemplate restTemplate;
     private final ThreadPoolTaskExecutor threadPoolExecutor;
@@ -55,7 +55,6 @@ public class AsyncClientImpl implements AsyncClient
         return threadPoolExecutor
             .submit(() -> restTemplate.postForEntity(translateUrl(url), request, responseType, args).getBody());
     }
-
     private String translateUrl(String url)
     {
         return url.startsWith("/")

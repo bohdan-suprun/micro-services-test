@@ -1,9 +1,0 @@
-ua\suprun\userpref\configuration\ConversionServiceConfiguration.class
-ua\suprun\userpref\converter\UserPreferencesEntityToUserPreferencesDtoConverter.class
-ua\suprun\userpref\service\UserPreferencesService.class
-ua\suprun\userpref\UserPreferencesApp.class
-ua\suprun\userpref\service\impl\UserPreferencesServiceImpl.class
-ua\suprun\userpref\repository\UserPreferencesRepository.class
-ua\suprun\userpref\entity\UserPreferencesEntity.class
-ua\suprun\userpref\controller\UserPreferencesController.class
-ua\suprun\userpref\converter\UserPreferencesDtoToUserPreferencesEntityConverter.class

@@ -6,15 +6,10 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-    # volumes:
-      # - ./db:/var/lib/mysql
+    volumes:
+      - mysql:/var/lib/mysql
     ports:
       - 3307:3306
-  trace-server:
-    image: trace-server:latest
-    restart: always
-    ports:
-      - 9090:9090
   discovery:
     image: discovery-server:latest
     restart: always
@@ -27,12 +22,12 @@ services:
     restart: always
     environment:
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
-      TRACE_SERVER_URL: trace-server:9090
+      TRACE_SERVER_URL: zipkin:9411
     ports:
       - 8000:8000
     links:
       - discovery
-      - trace-server
+      - zipkin
   films:
     image: films
     restart: always
@@ -40,11 +35,16 @@ services:
       DB_HOST: db
       DB_PASSWORD: root
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
-      TRACE_SERVER_URL: trace-server:9090
+      TRACE_SERVER_URL: zipkin:9411
+      RABBIT_HOST: rabbit
+      RABBIT_PORT: 5672
+      RABBIT_USER: admin
+      RABBIT_PASSWORD: admin
     links:
       - discovery
-      - trace-server
+      - zipkin
       - db
+      - rabbit
   user:
      image: user:latest
      restart: always
@@ -52,10 +52,10 @@ services:
        DB_HOST: db
        DB_PASSWORD: root
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
-       TRACE_SERVER_URL: trace-server:9090
+       TRACE_SERVER_URL: zipkin:9411
      links:
        - discovery
-       - trace-server
+       - zipkin
        - db
   user-preferences:
      image: user-preferences:latest
@@ -64,20 +64,25 @@ services:
        DB_HOST: db
        DB_PASSWORD: root
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
-       TRACE_SERVER_URL: trace-server:9090
+       TRACE_SERVER_URL: zipkin:9411
      links:
        - discovery
-       - trace-server
+       - zipkin
        - db
   user-films-edge:
      image: user-films-edge:latest
      restart: always
      environment:
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
-       TRACE_SERVER_URL: trace-server:9090
+       TRACE_SERVER_URL: zipkin:9411
+       RABBIT_HOST: rabbit
+       RABBIT_PORT: 5672
+       RABBIT_USER: admin
+       RABBIT_PASSWORD: admin
      links:
        - discovery
-       - trace-server
+       - zipkin
+       - rabbit
   rabbit:
     image: "rabbitmq:3-management"
     environment:
@@ -87,3 +92,47 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+
+  # sudo sysctl -w vm.max_map_count=262144
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.6.1
+    environment:
+       ELASTICSEARCH_URL: http://elastic:9200
+    ports:
+      - 5601:5601
+    links:
+      - elastic
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: 6.6.1
+    ports:
+      - "4560:4560"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    links:
+      - elastic
+volumes:
+  esdata:
+    driver: local
+  mysql:
+    driver: local
