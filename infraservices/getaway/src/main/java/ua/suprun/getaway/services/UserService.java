@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
+import ua.suprun.dto.user.UserDto;
 
 /**
  * Class UserService implementation.
@@ -19,8 +18,11 @@ public class UserService
     private RestTemplate restTemplate;
 
     public String getUserRoleByEmail(String email) {
-        final ResponseEntity<Map> entity = restTemplate.getForEntity("http://user/email/?userEmail={1}", Map.class, email);
+        final ResponseEntity<UserDto> entity = restTemplate
+            .getForEntity("http://user/email/?userEmail={1}", UserDto.class, email);
 
-        return entity.getBody().getOrDefault("role", "").toString();
+        return entity.getBody() != null
+            ? entity.getBody().getRole()
+            : "";
     }
 }
