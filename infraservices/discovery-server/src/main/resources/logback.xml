@@ -1,4 +1,4 @@
-<configuration debug="true">
+<configuration debug="false">
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <property name="CONSOLE_LOG_PATTERN"
@@ -7,16 +7,15 @@
     <property name="FILE_LOG_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%X{principal}] [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
-    <springProperty scope="context" name="LOGSTASH" source="elk:5044"/>
+    <variable name="LOGSTASH" value="${LOGSTASH_HOST:-logstash}"/>
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
-    <springProperty scope="context" name="APP_VERSION" source="1"/>
 
     <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <keepAliveDuration>5 minutes</keepAliveDuration>
         <reconnectionDelay>10 second</reconnectionDelay>
         <waitStrategyType>sleeping</waitStrategyType>
         <ringBufferSize>16384</ringBufferSize>
-        <destination>logstash</destination>
+        <destination>${LOGSTASH}</destination>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->

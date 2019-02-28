@@ -15,19 +15,24 @@ services:
     restart: always
     environment:
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+      LOGSTASH_HOST: logstash
     ports:
       - 8010:8010
+    links:
+      - logstash
   getaway:
     image: getaway:latest
     restart: always
     environment:
       EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
       TRACE_SERVER_URL: zipkin:9411
+      LOGSTASH_HOST: logstash
     ports:
       - 8000:8000
     links:
       - discovery
       - zipkin
+      - logstash
   films:
     image: films
     restart: always
@@ -40,11 +45,13 @@ services:
       RABBIT_PORT: 5672
       RABBIT_USER: admin
       RABBIT_PASSWORD: admin
+      LOGSTASH_HOST: logstash
     links:
       - discovery
       - zipkin
       - db
       - rabbit
+      - logstash
   user:
      image: user:latest
      restart: always
@@ -53,10 +60,12 @@ services:
        DB_PASSWORD: root
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
        TRACE_SERVER_URL: zipkin:9411
+       LOGSTASH_HOST: logstash
      links:
        - discovery
        - zipkin
        - db
+       - logstash
   user-preferences:
      image: user-preferences:latest
      restart: always
@@ -65,10 +74,12 @@ services:
        DB_PASSWORD: root
        EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
        TRACE_SERVER_URL: zipkin:9411
+       LOGSTASH_HOST: logstash
      links:
        - discovery
        - zipkin
        - db
+       - logstash
   user-films-edge:
      image: user-films-edge:latest
      restart: always
@@ -79,10 +90,12 @@ services:
        RABBIT_PORT: 5672
        RABBIT_USER: admin
        RABBIT_PASSWORD: admin
+       LOGSTASH_HOST: logstash
      links:
        - discovery
        - zipkin
        - rabbit
+       - logstash
   rabbit:
     image: "rabbitmq:3-management"
     environment:
