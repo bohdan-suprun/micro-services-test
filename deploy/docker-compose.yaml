@@ -18,8 +18,8 @@ services:
       LOGSTASH_HOST: logstash
     ports:
       - 8010:8010
-    links:
-      - logstash
+#    links:
+#      - logstash
   getaway:
     image: getaway:latest
     restart: always
@@ -31,8 +31,8 @@ services:
       - 8000:8000
     links:
       - discovery
-      - zipkin
-      - logstash
+#      - zipkin
+#      - logstash
   films:
     image: films
     restart: always

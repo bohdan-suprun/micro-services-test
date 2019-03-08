@@ -15,6 +15,7 @@
         <module>getaway</module>
         <module>discovery-server</module>
         <module>traceserver</module>
+        <module>turbine</module>
     </modules>
     <dependencies>
         <dependency>
