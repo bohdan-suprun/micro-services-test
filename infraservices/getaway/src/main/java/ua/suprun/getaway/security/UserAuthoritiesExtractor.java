@@ -1,5 +1,6 @@
 package ua.suprun.getaway.security;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,7 @@ public class UserAuthoritiesExtractor implements AuthoritiesExtractor
         final String email = map.get("email").toString();
         final String userRoleByEmail = userService.getUserRoleByEmail(email);
 
-        if (userRoleByEmail != null && !userRoleByEmail.isEmpty())
+        if (StringUtils.isNotBlank(userRoleByEmail))
         {
             return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRoleByEmail.toUpperCase()));
         }

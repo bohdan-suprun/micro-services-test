@@ -12,3 +12,11 @@ application:
   amqp:
     films:
       get-films-by-id-exchange-name: get-films-by-id-exchange
+
+management:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  endpoints:
+    web.exposure.include: hystrix.stream

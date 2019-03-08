@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host: ${RABBIT_HOST:192.168.99.100}
+    port: ${RABBIT_PORT:5672}
+    password: ${RABBIT_USER:admin}
+    username: ${RABBIT_PASSWORD:admin}
   application:
     name: turbine
 server:
@@ -8,6 +13,7 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_DEFAULT_ZONE:http://root:root@localhost:8010/eureka/}
-
-turbine:
-  cluster-name-expression: 'dafault'
+#turbine:
+#  aggregator:
+#    clusterConfig: SAMPLE-HYSTRIX-AGGREGATE
+#  appConfig: SAMPLE-HYSTRIX-AGGREGATE

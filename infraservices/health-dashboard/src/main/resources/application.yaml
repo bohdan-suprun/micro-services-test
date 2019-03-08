@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: health-dashboard
+server:
+  port: 9100

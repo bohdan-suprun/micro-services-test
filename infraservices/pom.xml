@@ -14,8 +14,8 @@
     <modules>
         <module>getaway</module>
         <module>discovery-server</module>
-        <module>traceserver</module>
         <module>turbine</module>
+        <module>health-dashboard</module>
     </modules>
     <dependencies>
         <dependency>

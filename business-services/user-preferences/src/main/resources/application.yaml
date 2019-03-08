@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host: ${RABBIT_HOST:192.168.99.100}
+    port: ${RABBIT_PORT:5672}
+    password: ${RABBIT_USER:admin}
+    username: ${RABBIT_PASSWORD:admin}
   application:
     name: user-preferences
   datasource:

@@ -10,6 +10,13 @@ services:
       - mysql:/var/lib/mysql
     ports:
       - 3307:3306
+  turbine:
+    image: turbine:latest
+    restart: always
+    environment:
+      EUREKA_DEFAULT_ZONE: http://root:root@discovery:8010/eureka/
+    ports:
+    - 9095:9095
   discovery:
     image: discovery-server:latest
     restart: always
@@ -93,9 +100,9 @@ services:
        LOGSTASH_HOST: logstash
      links:
        - discovery
-       - zipkin
+#       - zipkin
        - rabbit
-       - logstash
+#       - logstash
   rabbit:
     image: "rabbitmq:3-management"
     environment:

@@ -1,10 +1,9 @@
 package ua.suprun.userfilmsedge.service.impl;
 
-import com.netflix.discovery.converters.Auto;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.amqp.core.AsyncAmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import ua.suprun.asyncoperations.AsyncResultFetcher;
@@ -36,6 +35,7 @@ public class UserFilmsServiceImpl implements UserFilmsService
     @Autowired
     private AsyncAmqpTemplate asyncAmqpTemplate;
 
+    @HystrixCommand(fallbackMethod = "getUserFilmsDefault")
     @Override
     public UserFilmsDto getUserFilms(Long userId) throws Exception
     {
@@ -55,6 +55,11 @@ public class UserFilmsServiceImpl implements UserFilmsService
         userFilmsDto.setUserFilms(AsyncResultFetcher.fetchResult(filmsDto));
 
         return userFilmsDto;
+    }
+
+    private UserFilmsDto getUserFilmsDefault(Long userId)
+    {
+        return new UserFilmsDto();
     }
 
     @Override

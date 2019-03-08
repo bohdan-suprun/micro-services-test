@@ -1,6 +1,7 @@
 package ua.suprun.userfilmsedge;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import ua.suprun.common.annotations.EdgeService;
 
 /**
@@ -9,6 +10,7 @@ import ua.suprun.common.annotations.EdgeService;
  * @author Bohdan_Suprun
  */
 @EdgeService
+@EnableCircuitBreaker
 public class UserFilmsEdgeApp
 {
     public static void main(String[] args)
