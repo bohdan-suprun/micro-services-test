@@ -1,0 +1,205 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:${MYSQL_VERSION}
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3307:3306
+
+  health-dashboard:
+    image: health-dashboard:${APP_VERSION}
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    ports:
+      - 9100:9100
+    links:
+      - logstash
+
+  turbine:
+    image: turbine:${APP_VERSION}
+    restart: always
+    environment:
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    ports:
+      - 9095:9095
+    links:
+      - rabbit
+      - logstash
+
+  discovery:
+    image: discovery-server:${APP_VERSION}
+    restart: always
+    environment:
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    ports:
+      - 8010:8010
+    links:
+      - logstash
+      
+  getaway:
+    image: getaway:${APP_VERSION}
+    restart: always
+    environment:
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      TRACE_SERVER_URL: ${TRACE_SERVER_URL}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+    ports:
+      - 8000:8000
+    links:
+      - discovery
+      - zipkin
+      - logstash
+      - rabbit
+
+  films:
+    image: films:${APP_VERSION}
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      DB_HOST: ${MYSQL_HOST}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+      TRACE_SERVER_URL: ${TRACE_SERVER_URL}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    links:
+      - discovery
+      - zipkin
+      - db
+      - rabbit
+      - logstash
+
+  user:
+    image: user:${APP_VERSION}
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      DB_HOST: ${MYSQL_HOST}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      TRACE_SERVER_URL: ${TRACE_SERVER_URL}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    links:
+      - discovery
+      - db
+      - zipkin
+      - rabbit
+      - logstash
+
+  user-preferences:
+    image: user-preferences:${APP_VERSION}
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      DB_HOST: ${MYSQL_HOST}
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      TRACE_SERVER_URL: ${TRACE_SERVER_URL}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    links:
+      - discovery
+      - db
+      - zipkin
+      - rabbit
+      - logstash
+
+  user-films-edge:
+    image: user-films-edge:${APP_VERSION}
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
+      EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
+      RABBIT_HOST: ${RABBITMQ_HOST}
+      RABBIT_PORT: ${RABBITMQ_PORT}
+      RABBIT_USER: ${RABBITMQ_USER_NAME}
+      RABBIT_PASSWORD: ${RABBITMQ_USER_PASSWORD}
+      TRACE_SERVER_URL: ${TRACE_SERVER_URL}
+      LOGSTASH_HOST: ${LOGSTASH_HOST}
+    links:
+      - discovery
+      - rabbit
+      - zipkin
+      - logstash
+
+  rabbit:
+   image: rabbitmq:${RABBITMQ_VERSION}
+   environment:
+     RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER_NAME}
+     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_USER_PASSWORD}
+     RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_USER_VHOST}
+   ports:
+     - 15672:15672
+     - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+
+  # sudo sysctl -w vm.max_map_count=262144
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
+    environment:
+      cluster.name: "docker-cluster"
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: "${ES_JAVA_OPTS}"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ES_VERSION}
+    environment:
+       ELASTICSEARCH_URL: http://elastic:9200
+    ports:
+      - 5601:5601
+    links:
+      - elastic
+  logstash:
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: ${ES_VERSION}
+    ports:
+      - 4560:4560
+    environment:
+      LS_JAVA_OPTS: "${LS_JAVA_OPTS}"
+    links:
+      - elastic
+volumes:
+  esdata:
+    driver: local
+  mysql:
+    driver: local
