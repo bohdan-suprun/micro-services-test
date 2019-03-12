@@ -15,6 +15,7 @@ import ua.suprun.films.service.FilmService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,5 +52,14 @@ public class FilmController
         final FilmEntity filmById = filmService.findFilmById(filmId);
 
         return conversionService.convert(filmById, FilmDto.class);
+    }
+
+    @PostMapping("/filmsById")
+    public Collection<FilmDto> getFilmsById(@RequestBody List<Long> filmsId)
+    {
+        return filmService.findFilmsById(filmsId)
+            .stream()
+            .map(filmEntity -> conversionService.convert(filmEntity, FilmDto.class))
+            .collect(Collectors.toList());
     }
 }

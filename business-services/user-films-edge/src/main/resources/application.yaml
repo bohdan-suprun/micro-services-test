@@ -8,11 +8,6 @@ spring:
     name: user-films-edge
 swagger.base-package: ua.suprun.userfilmsedge.controller
 
-application:
-  amqp:
-    films:
-      get-films-by-id-exchange-name: get-films-by-id-exchange
-
 management:
   restart:
     enabled: true
@@ -20,3 +15,14 @@ management:
     enabled: true
   endpoints:
     web.exposure.include: hystrix.stream
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 45000
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: basic

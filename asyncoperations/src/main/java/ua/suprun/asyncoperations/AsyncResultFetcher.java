@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Class RestAsyncClient implementation.
+ * Class AsyncClient implementation.
  *
  * @author Bohdan_Suprun
  */

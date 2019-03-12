@@ -4,7 +4,7 @@ import lombok.Data;
 import ua.suprun.dto.films.FilmDto;
 import ua.suprun.dto.user.UserDto;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Class UserFilmsDto implementation.
@@ -15,5 +15,5 @@ import java.util.List;
 public class UsersLikedFilmDto
 {
     private FilmDto film;
-    private List<UserDto> usersLikedFilm;
+    private Collection<UserDto> usersLikedFilm;
 }

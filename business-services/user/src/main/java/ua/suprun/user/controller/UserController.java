@@ -14,6 +14,9 @@ import ua.suprun.user.entity.UserEntity;
 import ua.suprun.user.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class UserController implementation.
@@ -48,5 +51,14 @@ public class UserController
         final UserEntity user = userService.findUserByEmail(email);
 
         return conversionService.convert(user, UserDto.class);
+    }
+
+    @PostMapping("/usersById")
+    public Collection<UserDto> getUsersById(@RequestBody List<Long> userIds)
+    {
+        return userService.findUsersById(userIds)
+            .stream()
+            .map(userEntity -> conversionService.convert(userEntity, UserDto.class))
+            .collect(Collectors.toList());
     }
 }
