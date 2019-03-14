@@ -39,13 +39,17 @@ zuul:
     user-films-edge:
       path: /user-films-edge/**
 
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 31000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 41000
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 10000
+
 feign:
   hystrix:
     enabled: true
   client:
     config:
       default:
-        connectTimeout: 5000
+        connectTimeout: 10000
         readTimeout: 10000
         loggerLevel: basic

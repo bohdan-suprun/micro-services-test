@@ -45,6 +45,7 @@ services:
     environment:
       EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
       LOGSTASH_HOST: ${LOGSTASH_HOST}
+      SPRING_PROFILES_ACTIVE: ${ENV}
     ports:
       - 8010:8010
     links:
@@ -54,6 +55,7 @@ services:
     image: getaway:${APP_VERSION}
     restart: always
     environment:
+      SPRING_PROFILES_ACTIVE: ${ENV}
       EUREKA_DEFAULT_ZONE: ${EUREKA_DEFAULT_ZONE}
       TRACE_SERVER_URL: ${TRACE_SERVER_URL}
       LOGSTASH_HOST: ${LOGSTASH_HOST}

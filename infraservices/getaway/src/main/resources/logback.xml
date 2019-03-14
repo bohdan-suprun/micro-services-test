@@ -45,9 +45,11 @@
                     <stackTrace>
                         <fieldName>stackTrace</fieldName>
                         <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-                            <exclude>net\.sf\.cglib\..*</exclude>
+                            <exclude>^sun\.reflect\..*\.invoke</exclude>
+                            <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
                             <maxDepthPerThrowable>30</maxDepthPerThrowable>
                             <rootCauseFirst>true</rootCauseFirst>
+                            <shortenedClassNameLength>30</shortenedClassNameLength>
                         </throwableConverter>
                     </stackTrace>
                 </providers>
